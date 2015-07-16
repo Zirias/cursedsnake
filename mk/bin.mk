@@ -9,7 +9,7 @@ $$(BINDIR)$$(PSEP)$(T)$$(EXE): \
 
 $(P)%.d: $(P)%.c Makefile conf.mk mk$(PSEP)bin.mk $$($(T)_DEPS)
 	$$(VDEP)
-	$$(VR)$$(CCDEP) -MT"$@ $(@:.d=.o) $(@:.d=_s.o)" -MF$$@ \
+	$$(VR)$$(CCDEP) -MT"$@ $(@:.d=.o)" -MF$$@ \
 	    $$(CFLAGS) $$(INCLUDES) $$<
 
 ifneq ($$(MAKECMDGOALS),clean)
