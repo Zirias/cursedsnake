@@ -1,10 +1,8 @@
 P:= src$(PSEP)
+T:= csnake
 
-csnake_OBJS := $(P)csnake.o $(P)board.o
-csnake_SOURCES := $(csnake_OBJS:.o=.c)
+csnake_DEPS:= src$(PSEP)src.mk
+csnake_SOURCES:= $(P)csnake.c $(P)board.c
 
-SOURCES += $(csnake_SOURCES)
-
-T := csnake
 $(eval $(BINRULES))
 

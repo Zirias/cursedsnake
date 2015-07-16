@@ -107,10 +107,12 @@ ifneq ($(strip $(BINARIES)),)
 	strip --strip-all $(BINARIES)
 endif
 
+ifeq ($(PLATFORM),posix)
 install: strip
 ifneq ($(strip $(BINARIES)),)
 	$(INSTALL) -d $(DESTDIR)$(bindir)
 	$(INSTALL) $(BINARIES) $(DESTDIR)$(bindir)
+endif
 endif
 
 $(BINDIR):
