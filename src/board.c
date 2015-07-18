@@ -1,8 +1,6 @@
 #include "board.h"
 #include "screen.h"
-#include "common.h"
 
-#include <stdlib.h>
 #include <stdio.h>
 
 struct board
@@ -13,24 +11,21 @@ struct board
 };
 
 Board *
-board_create(void)
+board_create(Screen *screen)
 {
     Board *self;
-    Screen *screen;
     int w, h;
 
-    screen = screen_create();
-    if (!screen) return 0;
     w = screen_width(screen);
-    h = screen_height(screen) - 1;
-    if (w < MIN_COLS || h < MIN_ROWS+1)
+    h = screen_height(screen);
+    if (w < MIN_COLS || h < MIN_ROWS)
     {
 	screen_destroy(screen);
 	fputs("Console too small, need at least "
-		STR(MIN_COLS) "x" STR(MIN_ROWS+1),
-		stderr);
+		STR(MIN_COLS) "x" STR(MIN_ROWS) "\n", stderr);
 	return 0;
     }
+    --h;
 
     self = malloc(sizeof(Board) + (size_t)(w*h-1) * sizeof(Item));
     self->w = w;
@@ -52,8 +47,28 @@ void
 board_destroy(Board *self)
 {
     if (!self) return;
-    screen_getch(self->screen);
-    screen_destroy(self->screen);
     free(self);
+}
+
+void
+board_size(const Board *self, Pos *pos)
+{
+    pos->y = self->h;
+    pos->x = self->w;
+}
+
+void
+board_set(Board *self, int y, int x, Item item)
+{
+    if (y<0 || y>self->h || x<0 || x>self->w) return;
+    self->items[y*self->w+x] = item;
+    screen_putItem(self->screen, y, x, item);
+}
+
+Item
+board_get(const Board *self, int y, int x)
+{
+    if (y<0 || y>self->h || x<0 || x>self->w) return WALL;
+    return self->items[y*self->w+x];
 }
 

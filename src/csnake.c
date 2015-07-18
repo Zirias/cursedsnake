@@ -1,9 +1,10 @@
-#include "board.h"
+#include "game.h"
 
 int main(void)
 {
-    Board *board = board_create();
-    board_destroy(board);
+    Game *game = game_create();
+    game_run(game);
+    game_destroy(game);
     return 0;
 }
 
