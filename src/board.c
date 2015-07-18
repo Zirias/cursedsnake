@@ -60,7 +60,7 @@ board_size(const Board *self, Pos *pos)
 void
 board_set(Board *self, int y, int x, Item item)
 {
-    if (y<0 || y>self->h || x<0 || x>self->w) return;
+    if (y<0 || y>=self->h || x<0 || x>=self->w) return;
     self->items[y*self->w+x] = item;
     screen_putItem(self->screen, y, x, item);
 }
@@ -68,7 +68,7 @@ board_set(Board *self, int y, int x, Item item)
 Item
 board_get(const Board *self, int y, int x)
 {
-    if (y<0 || y>self->h || x<0 || x>self->w) return WALL;
+    if (y<0 || y>=self->h || x<0 || x>=self->w) return WALL;
     return self->items[y*self->w+x];
 }
 
