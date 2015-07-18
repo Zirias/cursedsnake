@@ -13,11 +13,13 @@ typedef enum item
     WALL
 } Item;
 
-typedef Item Board[BOARD_ROWS][BOARD_COLS];
+struct board;
+typedef struct board Board;
 
-extern Board board;
+Board *board_create(void);
+void board_destroy(Board *self);
 
-void clearBoard(void);
+void board_clear(Board *self);
 
 #endif
 

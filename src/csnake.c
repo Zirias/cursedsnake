@@ -2,7 +2,8 @@
 
 int main(void)
 {
-    clearBoard();
+    Board *board = board_create();
+    board_destroy(board);
     return 0;
 }
 
