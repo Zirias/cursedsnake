@@ -41,5 +41,6 @@ typedef struct
 void *xmalloc(size_t size);
 void insertString(char *dest, int pos, const char *s);
 int randomNum(int min, int max);
+void sleepMs(int ms);
 
 #endif

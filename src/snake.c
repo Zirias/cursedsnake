@@ -8,6 +8,7 @@ struct snake
     int len;
     int maxlen;
     int grow;
+    int skip;
     Dir dir;
     Pos *head;
     Pos *tail;
@@ -25,10 +26,11 @@ snake_create(Board *b, int y, int x)
     maxlen = (int)(boardsize.x * boardsize.y * .6 + 1.0);
 
     self = malloc(sizeof(Snake) + (size_t)(maxlen) * sizeof(Pos));
+    self->b = b;
     self->len = 0;
     self->maxlen = maxlen;
     self->grow = 8;
-    self->dir = LEFT;
+    self->dir = RIGHT;
     self->head = &(self->coord[0]);
     self->tail = &(self->coord[0]);
     self->coord[0].y = y;
@@ -47,6 +49,7 @@ void
 snake_setDir(Snake *self, Dir dir)
 {
     self->dir = dir;
+    if (dir == UP || dir == DOWN) self->skip = 1;
 }
 
 void
@@ -61,6 +64,14 @@ snake_step(Snake *self)
     Pos *newHead;
     Item item;
 
+    if (self->skip)
+    {
+	self->skip = 0;
+	return SST_NORMAL;
+    }
+
+    if (self->dir == UP || self->dir == DOWN) self->skip = 1;
+
     newHead = self->head + 1;
     if (newHead > &(self->coord[self->maxlen])) newHead = &(self->coord[0]);
     newHead->x = self->head->x;
@@ -68,16 +79,16 @@ snake_step(Snake *self)
     switch (self->dir)
     {
 	case LEFT:
-	    ++newHead->x;
+	    --newHead->x;
 	    break;
 	case DOWN:
 	    ++newHead->y;
 	    break;
 	case RIGHT:
-	    --newHead->y;
+	    ++newHead->x;
 	    break;
 	case UP:
-	    --newHead->x;
+	    --newHead->y;
 	    break;
     }
     item = board_get(self->b, newHead->y, newHead->x);

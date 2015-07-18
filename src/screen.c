@@ -43,6 +43,8 @@ screen_create()
     bkgd(COLOR_PAIR(CP_WHITE));
     raw();
     noecho();
+    keypad(stdscr, 1);
+    timeout(0);
     curs_set(0);
     self->status = newwin(1, 0, 0, 0);
     self->field = newwin(0, 0, 1, 0);
@@ -50,7 +52,7 @@ screen_create()
     tmp = malloc((size_t)self->w+1);
     memset(tmp, ' ' + 0x80, (size_t)self->w);
     tmp[self->w] = 0;
-    insertString(tmp, 1, "cursed snake");
+    insertString(tmp, 1, "cursed snake   hit <Q> to quit");
     insertString(tmp, self->w - 16, "score:");
     waddstr(self->status, tmp);
     free(tmp);
@@ -79,14 +81,6 @@ int
 screen_height(const Screen *self)
 {
     return self->h;
-}
-
-int
-screen_getch(Screen *self)
-{
-    ((void)(self));
-
-    return getch();
 }
 
 void
