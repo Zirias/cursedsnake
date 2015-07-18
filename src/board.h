@@ -1,8 +1,8 @@
 #ifndef CSNAKE_BOARD_H
 #define CSNAKE_BOARD_H
 
-#define BOARD_ROWS 24
-#define BOARD_COLS 80
+#define MIN_ROWS 23
+#define MIN_COLS 80
 
 typedef enum item
 {
