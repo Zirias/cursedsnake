@@ -1,4 +1,4 @@
-#include "../../screen.h"
+#include "screen.h"
 
 #include <stdlib.h>
 #include <curses.h>
