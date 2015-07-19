@@ -66,7 +66,7 @@ screen_create()
     wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_REVERSE|A_BOLD);
 #endif
     mvwaddstr(self->status, 0, 1, "cursed snake   <Q> quit  <SPACE> pause");
-    mvwaddstr(self->status, 0, self->w - 16, "score:");
+    mvwaddstr(self->status, 0, self->w - 25, "score:");
     wnoutrefresh(stdscr);
     wnoutrefresh(self->status);
     doupdate();
@@ -105,7 +105,14 @@ screen_clear(Screen *self)
 void
 screen_printScore(Screen *self, unsigned int score)
 {
-    mvwprintw(self->status, 0, self->w-9, "%8u", score);
+    mvwprintw(self->status, 0, self->w-18, "%8u", score);
+    wrefresh(self->status);
+}
+
+void
+screen_printTime(Screen *self, int minutes, int seconds)
+{
+    mvwprintw(self->status, 0, self->w-8, "[%02d:%02d]", minutes, seconds);
     wrefresh(self->status);
 }
 

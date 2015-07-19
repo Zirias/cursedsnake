@@ -56,6 +56,12 @@ snake_grow(Snake *self, int grow)
     self->grow += grow;
 }
 
+int
+snake_len(const Snake *self)
+{
+    return self->len;
+}
+
 Step
 snake_step(Snake *self)
 {

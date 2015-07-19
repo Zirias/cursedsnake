@@ -21,6 +21,7 @@ void snake_destroy(Snake *self);
 
 void snake_setDir(Snake *self, Dir dir);
 void snake_grow(Snake *self, int grow);
+int snake_len(const Snake *self);
 Step snake_step(Snake *self);
 
 #endif

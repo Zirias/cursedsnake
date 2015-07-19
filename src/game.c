@@ -16,6 +16,9 @@ static Board *board = 0;
 static Snake *snake = 0;
 static unsigned int score;
 static unsigned int scoreadd;
+static int seconds;
+static int minutes;
+static int clockticks;
 static int speed;
 static int hspeed;
 static int vspeed;
@@ -133,6 +136,9 @@ newgame(void)
     snake_destroy(snake);
     score = 0;
     scoreadd = 250;
+    seconds = 0;
+    minutes = 0;
+    clockticks = 100;
     speed = 8;
     hspeed = 10;
     vspeed = 15;
@@ -150,6 +156,7 @@ newgame(void)
 
     for (i = 0; i < maxFood / 3; ++i) addFood();
     screen_printScore(screen, score);
+    screen_printTime(screen, minutes, seconds);
 }
 
 void
@@ -333,6 +340,18 @@ game_run(void)
 		    hspeed -= 2;
 		}
 	    }
+	}
+
+	if (!--clockticks)
+	{
+	    clockticks = 100;
+	    ++seconds;
+	    if (seconds == 60)
+	    {
+		seconds = 0;
+		++minutes;
+	    }
+	    screen_printTime(screen, minutes, seconds);
 	}
 cont:;
     }
