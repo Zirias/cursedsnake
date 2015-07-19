@@ -198,7 +198,6 @@ screen_showDialog(Screen *self, const char *title, const char *fmt, ...)
     }
 
     free(buf);
-    touchwin(self->field);
     wrefresh(dlg);
     delwin(dlg);
 }
