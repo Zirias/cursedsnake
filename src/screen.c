@@ -52,8 +52,11 @@ screen_create()
     keypad(stdscr, 1);
     timeout(0);
     curs_set(0);
+    leaveok(stdscr, 1);
     self->status = newwin(1, 0, 0, 0);
+    leaveok(self->status, 1);
     self->field = newwin(0, 0, 1, 0);
+    leaveok(self->field, 1);
     wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_BLINK);
     tmp = malloc((size_t)self->w+1);
 #ifdef WIN32
@@ -183,6 +186,7 @@ screen_showDialog(Screen *self, const char *title, const char *fmt, ...)
     x = (self->w - w) >> 1;
 
     dlg = subwin(self->field, h, w, y, x);
+    leaveok(dlg, 1);
     werase(dlg);
     wbkgd(dlg, COLOR_PAIR(CP_DIALOG));
     box(dlg, 0, 0);
