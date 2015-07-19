@@ -29,7 +29,6 @@ board_create(Screen *screen)
     h = screen_height(screen);
     if (w < MIN_COLS || h < MIN_ROWS)
     {
-	screen_destroy(screen);
 	fputs("Console too small, need at least "
 		STR(MIN_COLS) "x" STR(MIN_ROWS) "\n", stderr);
 	return 0;
@@ -53,7 +52,11 @@ board_clear(Board *self)
     for (i=0; i<self->w*self->h; ++i)
     {
 	self->slots[i].it = EMPTY;
-	if (self->slots[i].f) food_destroy(self->slots[i].f);
+	if (self->slots[i].f)
+	{
+	    food_destroy(self->slots[i].f);
+	    self->slots[i].f = 0;
+	}
     }
 }
 
