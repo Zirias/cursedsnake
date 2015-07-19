@@ -235,10 +235,10 @@ game_run(void)
 		ticker_stop();
 		timeout(-1);
 		screen_showDialog(screen, "- P A U S E D -",
-			"Cursed Snake -- (C) 07/2015 Felix Palmen"
-			" <felix@palmen-it.de>.\n"
+			"Cursed Snake -- a snake game made with curses\n"
+			"(C) 07/2015 Felix Palmen <felix@palmen-it.de>.\n"
 			" \n"
-			"                 - press <SPACE> to resume -");
+			"         - press <SPACE> to resume -");
 		do
 		{
 		    key = getch();
