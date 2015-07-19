@@ -56,7 +56,7 @@ screen_create()
     memset(tmp, ' ' + 0x80, (size_t)self->w);
 #endif
     tmp[self->w] = 0;
-    insertString(tmp, 1, "cursed snake   hit <Q> to quit");
+    insertString(tmp, 1, "cursed snake   <Q> quit  <SPACE> pause");
     insertString(tmp, self->w - 16, "score:");
     waddstr(self->status, tmp);
     free(tmp);
@@ -91,6 +91,20 @@ void
 screen_printScore(Screen *self, unsigned int score)
 {
     mvwprintw(self->status, 0, self->w-9, "%8u", score);
+    wrefresh(self->status);
+}
+
+void
+screen_pauseOn(Screen *self)
+{
+    mvwaddstr(self->status, 0, 16, "-- PAUSED --  <SPACE> continue");
+    wrefresh(self->status);
+}
+
+void
+screen_pauseOff(Screen *self)
+{
+    mvwaddstr(self->status, 0, 16, "<Q> quit  <SPACE> pause       ");
     wrefresh(self->status);
 }
 

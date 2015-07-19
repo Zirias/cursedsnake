@@ -83,6 +83,19 @@ game_run(void)
 	    case KEY_RIGHT:
 		snake_setDir(snake, RIGHT);
 		break;
+
+	    case ' ':
+		ticker_stop();
+		timeout(-1);
+		screen_pauseOn(screen);
+		do
+		{
+		    key = getch();
+		} while (key != ' ');
+		screen_pauseOff(screen);
+		timeout(0);
+		ticker_start(5000);
+		break;
 	}
 
 	if (!--nextStep)
