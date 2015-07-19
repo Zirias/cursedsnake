@@ -3,149 +3,117 @@
 #include "screen.h"
 #include "board.h"
 #include "snake.h"
+#include "ticker.h"
 
-#include <pthread.h>
-#include <semaphore.h>
 #include <curses.h>
 
-struct game
-{
-    Screen *screen;
-    Board *board;
-    Snake *snake;
-    pthread_t timer;
-    sem_t tick;
-    sem_t endtimer;
-    unsigned int score;
-    unsigned int scoreadd;
-    int speed;
-    int nextStep;
-    int nextFood;
-};
+static Screen *screen;
+static Board *board;
+static Snake *snake;
+static unsigned int score;
+static unsigned int scoreadd;
+static int speed;
+static int nextStep;
+static int nextFood;
 
-static void *
-timerloop(void *data)
+void
+game_init(void)
 {
-    Game *self = data;
-
-    while (sem_trywait(&(self->endtimer))<0)
+    ticker_init();
+    screen = screen_create();
+    if (!screen) return;
+    board = board_create(screen);
+    if (!board)
     {
-	sleepMs(25);
-	sem_post(&(self->tick));
+	screen_destroy(screen);
+	return;
     }
-    return 0;
-}
-
-Game *
-game_create(void)
-{
-    Game *self = malloc(sizeof(Game));
-    self->screen = screen_create();
-    if (!self->screen)
+    snake = snake_create(board, 2, 10);
+    if (!snake)
     {
-	free(self);
-	return 0;
+	board_destroy(board);
+	screen_destroy(screen);
+	return;
     }
-    self->board = board_create(self->screen);
-    if (!self->board)
-    {
-	screen_destroy(self->screen);
-	free(self);
-	return 0;
-    }
-    self->snake = snake_create(self->board, 2, 10);
-    if (!self->snake)
-    {
-	board_destroy(self->board);
-	screen_destroy(self->screen);
-	free(self);
-	return 0;
-    }
-    self->score = 0;
-    self->scoreadd = 250;
-    self->speed = 3;
-    self->nextStep = 1;
-    self->nextFood = randomNum(20,40);
-    sem_init(&self->tick, 0, 1);
-    sem_init(&self->endtimer, 0, 0);
-    screen_printScore(self->screen, self->score);
-    return self;
+    score = 0;
+    scoreadd = 250;
+    speed = 16;
+    nextStep = 1;
+    nextFood = randomNum(100,200);
+    screen_printScore(screen, score);
 }
 
 void
-game_destroy(Game *self)
+game_done(void)
 {
-    if (!self) return;
-    sem_destroy(&(self->endtimer));
-    sem_destroy(&(self->tick));
-    snake_destroy(self->snake);
-    board_destroy(self->board);
-    screen_destroy(self->screen);
-    free(self);
+    snake_destroy(snake);
+    board_destroy(board);
+    screen_destroy(screen);
+    ticker_done();
 }
 
 void
-game_run(Game *self)
+game_run(void)
 {
     int key, x, y;
     Step step;
     Pos size;
 
-    board_size(self->board, &size);
-    pthread_create(&(self->timer), 0, &timerloop, self);
-    while (sem_wait(&(self->tick))==0)
+    ticker_start(5000);
+    board_size(board, &size);
+    while (1)
     {
+	ticker_wait();
 	key = getch();
 	if (key == 'q' || key == 'Q') break;
 	switch (key)
 	{
 	    case KEY_LEFT:
-		snake_setDir(self->snake, LEFT);
+		snake_setDir(snake, LEFT);
 		break;
 
 	    case KEY_DOWN:
-		snake_setDir(self->snake, DOWN);
+		snake_setDir(snake, DOWN);
 		break;
 
 	    case KEY_UP:
-		snake_setDir(self->snake, UP);
+		snake_setDir(snake, UP);
 		break;
 
 	    case KEY_RIGHT:
-		snake_setDir(self->snake, RIGHT);
+		snake_setDir(snake, RIGHT);
 		break;
 	}
 
-	if (!--self->nextStep)
+	if (!--nextStep)
 	{
-	    step = snake_step(self->snake);
+	    step = snake_step(snake);
 	    if (step == SST_HIT) break;
 	    if (step == SST_FOOD)
 	    {
-		snake_grow(self->snake, randomNum(3,8));
-		self->score += self->scoreadd;
-		self->scoreadd = 250;
-		screen_printScore(self->screen, self->score);
+		snake_grow(snake, randomNum(3,8));
+		score += scoreadd;
+		scoreadd = 250;
+		screen_printScore(screen, score);
 	    }
 	    else
 	    {
-		if (self->scoreadd > 50) --self->scoreadd;
+		if (scoreadd > 50) --scoreadd;
 	    }
-	    self->nextStep = self->speed;
+	    nextStep = speed;
 	}
 
-	if (!--self->nextFood)
+	if (!--nextFood)
 	{
-	    self->nextFood = randomNum(80, 200);
+	    nextFood = randomNum(400, 1000);
 	    do
 	    {
 		x = randomNum(0, size.x-1);
 		y = randomNum(0, size.y-1);
-	    } while (board_get(self->board, y, x) != EMPTY);
-	    board_set(self->board, y, x, FOOD);
+	    } while (board_get(board, y, x) != EMPTY);
+	    board_set(board, y, x, FOOD);
 	}
     }
-    sem_post(&(self->endtimer));
-    pthread_join(self->timer, 0);
+    ticker_stop();
 }
 

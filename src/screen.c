@@ -117,10 +117,11 @@ screen_putItem(Screen *self, int y, int x, Item item)
 	    mvwaddch(self->field, y, x, '#'|COLOR_PAIR(CP_GREEN)|A_BOLD);
 	    break;
 	case WALL:
-	    mvwaddch(self->field, y, x,
 #ifdef WIN32
+	    mvwaddch(self->field, y, x,
 		    ' '|COLOR_PAIR(CP_RED)|A_REVERSE);
 #else
+	    mvwaddch(self->field, y, x,
 		    (' '+0x80)|COLOR_PAIR(CP_RED)|A_REVERSE);
 #endif
 	    break;

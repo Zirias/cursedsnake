@@ -3,12 +3,9 @@
 
 #include "common.h"
 
-struct game;
-typedef struct game Game;
+void game_init(void);
+void game_done(void);
 
-Game *game_create(void);
-void game_destroy(Game *self);
-
-void game_run(Game *self);
+void game_run(void);
 
 #endif

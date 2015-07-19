@@ -2,9 +2,9 @@
 
 int main(void)
 {
-    Game *game = game_create();
-    game_run(game);
-    game_destroy(game);
+    game_init();
+    game_run();
+    game_done();
     return 0;
 }
 
