@@ -12,8 +12,8 @@ SOURCES += $$($(T)_SOURCES_FULL)
 $$(BINDIR)$$(PSEP)$(T)$$(EXE): $$($(T)_SOURCES_FULL:.c=.o) \
     $$($(T)_LIBS) | bindir
 	$$(VLD)
-	$$(VR)$$(CC) -o$$@ $$(LDFLAGS) $$($(T)_LDFLAGS) \
-	       $$($(T)_$$(PLATFORM)_LDFLAGS) $$^ $$($(T)_LIBS)
+	$$(VR)$$(CC) -o$$@ $$^ $$($(T)_LIBS) $$(LDFLAGS) $$($(T)_LDFLAGS) \
+	       $$($(T)_$$(PLATFORM)_LDFLAGS)
 
 $(P)$$(PSEP)%.d: $(P)$$(PSEP)%.c Makefile conf.mk
 	$$(VDEP)

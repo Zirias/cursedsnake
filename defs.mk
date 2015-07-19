@@ -1,5 +1,6 @@
 ifeq ($(OS),Windows_NT)
 
+EXE := .exe
 CMDSEP := &
 PSEP := \\
 CPF := copy /y
@@ -27,6 +28,7 @@ else
 
 SYSNAME := $(shell uname)
 
+EXE :=
 CMDSEP := ;
 PSEP := /
 CPF := cp -f

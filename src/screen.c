@@ -50,7 +50,11 @@ screen_create()
     self->field = newwin(0, 0, 1, 0);
     wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_BLINK);
     tmp = malloc((size_t)self->w+1);
+#ifdef WIN32
+    memset(tmp, ' ', (size_t)self->w);
+#else
     memset(tmp, ' ' + 0x80, (size_t)self->w);
+#endif
     tmp[self->w] = 0;
     insertString(tmp, 1, "cursed snake   hit <Q> to quit");
     insertString(tmp, self->w - 16, "score:");
@@ -114,7 +118,11 @@ screen_putItem(Screen *self, int y, int x, Item item)
 	    break;
 	case WALL:
 	    mvwaddch(self->field, y, x,
+#ifdef WIN32
+		    ' '|COLOR_PAIR(CP_RED)|A_REVERSE);
+#else
 		    (' '+0x80)|COLOR_PAIR(CP_RED)|A_REVERSE);
+#endif
 	    break;
     }
     wrefresh(self->field);
