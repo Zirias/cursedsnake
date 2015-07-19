@@ -181,7 +181,8 @@ screen_showDialog(Screen *self, const char *title, const char *fmt, ...)
     y = (self->h - h) >> 1;
     x = (self->w - w) >> 1;
 
-    dlg = newwin(h, w, y, x);
+    dlg = subwin(self->field, h, w, y, x);
+    wclear(dlg);
     wbkgd(dlg, COLOR_PAIR(CP_DIALOG));
     box(dlg, 0, 0);
 
@@ -192,6 +193,7 @@ screen_showDialog(Screen *self, const char *title, const char *fmt, ...)
     }
 
     free(buf);
+    touchwin(self->field);
     wrefresh(dlg);
     delwin(dlg);
 }
