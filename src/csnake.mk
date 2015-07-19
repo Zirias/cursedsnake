@@ -6,6 +6,7 @@ csnake_PLATFORMSOURCES:= ticker.c
 csnake_posix_LDFLAGS:= -lcurses
 csnake_win32_LDFLAGS:= -static-libgcc -Wl,-Bstatic -lpdcurses \
 	-Wl,-Bdynamic -lwinmm
+csnake_win32_RES:= res$(PSEP)csnake.rc
 
 $(eval $(BINRULES))
 

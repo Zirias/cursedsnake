@@ -9,6 +9,15 @@ $(T)_SOURCES_FULL += $$(addprefix \
 endif
 SOURCES += $$($(T)_SOURCES_FULL)
 
+ifeq ($$(PLATFORM),win32)
+$(T)_LIBS += $$($(T)_win32_RES:.rc=.o)
+
+$$($(T)_win32_RES:.rc=.o): $$($(T)_win32_RES)
+	$$(VRES)
+	$$(VR)windres $$^ $$@
+
+endif
+
 $$(BINDIR)$$(PSEP)$(T)$$(EXE): $$($(T)_SOURCES_FULL:.c=.o) \
     $$($(T)_LIBS) | bindir
 	$$(VLD)
