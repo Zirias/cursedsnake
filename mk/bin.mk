@@ -17,7 +17,7 @@ $$(BINDIR)$$(PSEP)$(T)$$(EXE): $$($(T)_SOURCES_FULL:.c=.o) \
 
 $(P)$$(PSEP)%.d: $(P)$$(PSEP)%.c Makefile conf.mk
 	$$(VDEP)
-	$$(VR)$$(CCDEP) -MT"$@ $(@:.d=.o)" -MF$$@ \
+	$$(VR)$$(CCDEP) -MT"$$@ $$(@:.d=.o)" -MF$$@ \
 	    $$(CFLAGS) $$(INCLUDES) $$<
 
 ifneq ($$(MAKECMDGOALS),clean)
