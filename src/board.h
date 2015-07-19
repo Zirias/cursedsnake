@@ -18,6 +18,7 @@ void board_clear(Board *self);
 void board_size(const Board *self, Pos *pos);
 void board_set(Board *self, int y, int x, Item item);
 Item board_get(const Board *self, int y, int x);
+void board_redraw(const Board *self);
 
 #endif
 

@@ -62,7 +62,7 @@ board_set(Board *self, int y, int x, Item item)
 {
     if (y<0 || y>=self->h || x<0 || x>=self->w) return;
     self->items[y*self->w+x] = item;
-    screen_putItem(self->screen, y, x, item);
+    screen_putItem(self->screen, y, x, item, 1);
 }
 
 Item
@@ -70,5 +70,15 @@ board_get(const Board *self, int y, int x)
 {
     if (y<0 || y>=self->h || x<0 || x>=self->w) return WALL;
     return self->items[y*self->w+x];
+}
+
+void board_redraw(const Board *self)
+{
+    int y, x;
+    for (y = 0; y < self->h; ++y) for (x = 0; x < self->w; ++x)
+    {
+	screen_putItem(self->screen, y, x, self->items[y*self->w+x], 0);
+    }
+    screen_refresh(self->screen);
 }
 

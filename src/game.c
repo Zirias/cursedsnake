@@ -72,7 +72,21 @@ game_run(void)
     {
 	ticker_wait();
 	key = getch();
-	if (key == 'q' || key == 'Q') break;
+	if (key == 'q' || key == 'Q')
+	{
+	    ticker_stop();
+	    screen_showDialog(screen, "QUIT",
+		    "Are you sure you want to abandon your game?\n"
+		    " \n"
+		    "Hit <Q> again to quit, any other key to resume.");
+	    timeout(-1);
+	    key = getch();
+	    if (key == 'q' || key == 'Q') break;
+	    board_redraw(board);
+	    timeout(0);
+	    ticker_start(5000);
+	    goto cont;
+	}
 	switch (key)
 	{
 	    case KEY_LEFT:
@@ -108,16 +122,31 @@ game_run(void)
 	if (!--nextStep)
 	{
 	    step = snake_step(snake);
-	    if (step == SST_HIT)
+	    if (step == SST_HIT || step == SST_MAXLEN)
 	    {
 		ticker_stop();
 		flash();
 		beep();
-		screen_showDialog(screen, "OUCH!! -- Game over",
-			"Your poor snake hit something and has a headache.\n"
-			"Your final score is %lu.\n"
-			" \n"
-			"Press <Q> to quit, any other key to restart.", score);
+		if (step == SST_HIT)
+		{
+		    screen_showDialog(screen, "OUCH!! -- Game over",
+			    "Your poor snake hit something and has "
+			    "a headache.\n"
+			    "Your final score is %lu.\n"
+			    " \n"
+			    "Press <Q> to quit, any other key to restart.",
+			    score);
+		}
+		else
+		{
+		    screen_showDialog(screen, "CONGRATULATIONS!",
+			    "Your snake really got huge. Now it's time to\n"
+			    "take some rest.\n"
+			    "Your final score is: %lu.\n"
+			    " \n"
+			    "Press <Q> to quit, any other key to play again.",
+			    score);
+		}
 		timeout(-1);
 		key = getch();
 		if (key == 'q' || key == 'Q') break;

@@ -122,7 +122,7 @@ screen_pauseOff(Screen *self)
 }
 
 void
-screen_putItem(Screen *self, int y, int x, Item item)
+screen_putItem(Screen *self, int y, int x, Item item, int refresh)
 {
     switch (item)
     {
@@ -153,7 +153,7 @@ screen_putItem(Screen *self, int y, int x, Item item)
 #endif
 	    break;
     }
-    wrefresh(self->field);
+    if (refresh) wrefresh(self->field);
 }
 
 void
@@ -207,3 +207,8 @@ screen_showDialog(Screen *self, const char *title, const char *fmt, ...)
     delwin(dlg);
 }
 
+void
+screen_refresh(Screen *self)
+{
+    wrefresh(self->field);
+}

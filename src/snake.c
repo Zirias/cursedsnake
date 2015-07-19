@@ -23,7 +23,7 @@ snake_create(Board *b, int y, int x)
     int maxlen;
 
     board_size(b, &boardsize);
-    maxlen = (int)(boardsize.x * boardsize.y * .6 + 1.0);
+    maxlen = (int)(boardsize.x * boardsize.y * .25 + 1.0);
 
     self = malloc(sizeof(Snake) + (size_t)(maxlen) * sizeof(Pos));
     self->b = b;
