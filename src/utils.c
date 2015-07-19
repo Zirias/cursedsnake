@@ -14,13 +14,6 @@ xmalloc(size_t size)
     return ptr;
 }
 
-void
-insertString(char *dest, int pos, const char *s)
-{
-    dest += pos;
-    while (*s) *dest++ = *s++;
-}
-
 int
 randomNum(int min, int max)
 {

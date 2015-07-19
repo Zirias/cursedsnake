@@ -29,7 +29,6 @@ Screen *
 screen_create()
 {
     Screen *self = malloc(sizeof(Screen));
-    char *tmp;
 
     self->main = initscr();
     if (!self->main)
@@ -43,7 +42,7 @@ screen_create()
     init_pair(CP_RED, COLOR_RED, COLOR_BLACK);
     init_pair(CP_YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(CP_GREEN, COLOR_GREEN, COLOR_BLACK);
-    init_pair(CP_STATUS, COLOR_BLACK, COLOR_CYAN);
+    init_pair(CP_STATUS, COLOR_CYAN, COLOR_BLACK);
     init_pair(CP_DIALOG, COLOR_WHITE, COLOR_BLUE);
     bkgd(COLOR_PAIR(CP_WHITE));
     raw();
@@ -57,18 +56,9 @@ screen_create()
     leaveok(self->status, 1);
     self->field = newwin(0, 0, 1, 0);
     leaveok(self->field, 1);
-    wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_BLINK);
-    tmp = malloc((size_t)self->w+1);
-#ifdef WIN32
-    memset(tmp, ' ', (size_t)self->w);
-#else
-    memset(tmp, ' ' + 0x80, (size_t)self->w);
-#endif
-    tmp[self->w] = 0;
-    insertString(tmp, 1, "cursed snake   <Q> quit  <SPACE> pause");
-    insertString(tmp, self->w - 16, "score:");
-    waddstr(self->status, tmp);
-    free(tmp);
+    wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_BOLD|A_REVERSE);
+    mvwaddstr(self->status, 0, 1, "cursed snake   <Q> quit  <SPACE> pause");
+    mvwaddstr(self->status, 0, self->w - 16, "score:");
     wnoutrefresh(stdscr);
     wnoutrefresh(self->status);
     doupdate();
@@ -137,13 +127,8 @@ screen_putItem(Screen *self, int y, int x, Item item, int refresh)
 	    mvwaddch(self->field, y, x, '#'|COLOR_PAIR(CP_GREEN));
 	    break;
 	case WALL:
-#ifdef WIN32
 	    mvwaddch(self->field, y, x,
 		    ' '|COLOR_PAIR(CP_RED)|A_REVERSE);
-#else
-	    mvwaddch(self->field, y, x,
-		    (' '+0x80)|COLOR_PAIR(CP_RED)|A_REVERSE);
-#endif
 	    break;
     }
     if (refresh) wrefresh(self->field);
