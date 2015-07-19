@@ -59,6 +59,73 @@ addFood(void)
 }
 
 static void
+randomWalls(void)
+{
+    int i;
+
+    int num = bsize.y * bsize.x / 230;
+    int mvlen = bsize.y / 4;
+    int dvlen = bsize.y / 6;
+    int mhlen = bsize.x / 4;
+    int dhlen = bsize.x / 6;
+
+    for (i=0; i < num; ++i)
+    {
+	int y = randomNum(0, bsize.y-1);
+	int x = randomNum(0, bsize.x-1);
+	if (randomNum(0,1))
+	{
+	    int d, l, p;
+	    if (x <= bsize.x/2) d=1;
+	    else d=-1;
+	    l = randomNum(mhlen-dhlen, mhlen+dhlen);
+	    for (p = 0; p < l; ++p)
+	    {
+		board_set(board, y, x, WALL);
+		x += d;
+	    }
+	}
+	else
+	{
+	    int d, l, p;
+	    if (y <= bsize.y/2) d=1;
+	    else d=-1;
+	    l = randomNum(mvlen-dvlen, mvlen+dvlen);
+	    for (p = 0; p < l; ++p)
+	    {
+		board_set(board, y, x, WALL);
+		y += d;
+	    }
+	}
+    }
+}
+
+static void
+createSnake(void)
+{
+    int y, x, i;
+
+    int isclear = 0;
+    while (!isclear)
+    {
+	y = randomNum(0, bsize.y-1);
+	x = randomNum(0, bsize.x-13);
+
+	isclear = 1;
+	for (i=0; i<12; ++i)
+	{
+	    if (board_get(board, y, x+i) != EMPTY)
+	    {
+		isclear = 0;
+		break;
+	    }
+	}
+    }
+
+    snake = snake_create(board, y, x);
+}
+
+static void
 newgame(void)
 {
     int i;
@@ -72,7 +139,8 @@ newgame(void)
     nextStep = 1;
     nextSpeed = NEXT_SPEED_TICKS;
     nextFood = randomNum(50,100);
-    snake = snake_create(board, 2, 10);
+    randomWalls();
+    createSnake();
     if (!snake)
     {
 	board_destroy(board);
@@ -97,7 +165,7 @@ game_init(void)
 	return;
     }
     board_size(board, &bsize);
-    maxFood = bsize.y * bsize.x / 60;
+    maxFood = bsize.y * bsize.x / 50;
     numFood = 0;
     food_onCreate(&foodCreated);
     food_onDestroy(&foodDestroyed);
@@ -118,7 +186,7 @@ game_done(void)
 void
 game_run(void)
 {
-    int key;
+    int key, nfm;
     Step step;
 
     ticker_start(10000);
@@ -233,7 +301,9 @@ game_run(void)
 
 	if (!--nextFood)
 	{
-	    nextFood = randomNum(200, 500);
+	    nfm = (int)(4000.0 / maxFood * numFood / maxFood);
+	    if (nfm < 1) nfm = 1;
+	    nextFood = randomNum(nfm, nfm+200);
 	    addFood();
 	}
 
