@@ -126,7 +126,6 @@ screen_putItem(Screen *self, int y, int x, Item item)
 #endif
 	    break;
     }
-    refresh();
     wrefresh(self->field);
 }
 
