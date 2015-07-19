@@ -304,6 +304,7 @@ game_run(void)
 	    {
 		snake_grow(snake, randomNum(3,8));
 		score += scoreadd;
+		if (score > 99999999) score = 99999999;
 		scoreadd = 250;
 		screen_printScore(screen, score);
 	    }
@@ -348,8 +349,12 @@ game_run(void)
 	    ++seconds;
 	    if (seconds == 60)
 	    {
-		seconds = 0;
-		++minutes;
+		if (minutes < 99)
+		{
+		    seconds = 0;
+		    ++minutes;
+		}
+		else --seconds;
 	    }
 	    screen_printTime(screen, minutes, seconds);
 	}

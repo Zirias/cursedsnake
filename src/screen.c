@@ -105,7 +105,7 @@ screen_clear(Screen *self)
 void
 screen_printScore(Screen *self, unsigned int score)
 {
-    mvwprintw(self->status, 0, self->w-18, "%8u", score);
+    mvwprintw(self->status, 0, self->w-18, "%08u", score);
     wrefresh(self->status);
 }
 
