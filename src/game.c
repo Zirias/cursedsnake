@@ -7,14 +7,33 @@
 
 #include <curses.h>
 
-static Screen *screen;
-static Board *board;
-static Snake *snake;
+static Screen *screen = 0;
+static Board *board = 0;
+static Snake *snake = 0;
 static unsigned int score;
 static unsigned int scoreadd;
 static int speed;
 static int nextStep;
 static int nextFood;
+
+static void
+newgame(void)
+{
+    snake_destroy(snake);
+    score = 0;
+    scoreadd = 250;
+    speed = 16;
+    nextStep = 1;
+    nextFood = randomNum(100,200);
+    snake = snake_create(board, 2, 10);
+    if (!snake)
+    {
+	board_destroy(board);
+	screen_destroy(screen);
+	exit(1);
+    }
+    screen_printScore(screen, score);
+}
 
 void
 game_init(void)
@@ -28,19 +47,7 @@ game_init(void)
 	screen_destroy(screen);
 	return;
     }
-    snake = snake_create(board, 2, 10);
-    if (!snake)
-    {
-	board_destroy(board);
-	screen_destroy(screen);
-	return;
-    }
-    score = 0;
-    scoreadd = 250;
-    speed = 16;
-    nextStep = 1;
-    nextFood = randomNum(100,200);
-    screen_printScore(screen, score);
+    newgame();
 }
 
 void
@@ -101,7 +108,26 @@ game_run(void)
 	if (!--nextStep)
 	{
 	    step = snake_step(snake);
-	    if (step == SST_HIT) break;
+	    if (step == SST_HIT)
+	    {
+		ticker_stop();
+		flash();
+		beep();
+		screen_showDialog(screen, "OUCH!! -- Game over",
+			"Your poor snake hit something and has a headache.\n"
+			"Your final score is %lu.\n"
+			" \n"
+			"Press <Q> to quit, any other key to restart.", score);
+		timeout(-1);
+		key = getch();
+		if (key == 'q' || key == 'Q') break;
+		board_clear(board);
+		screen_clear(screen);
+		newgame();
+		timeout(0);
+		ticker_start(5000);
+		goto cont;
+	    }
 	    if (step == SST_FOOD)
 	    {
 		snake_grow(snake, randomNum(3,8));
@@ -126,6 +152,7 @@ game_run(void)
 	    } while (board_get(board, y, x) != EMPTY);
 	    board_set(board, y, x, FOOD);
 	}
+cont:;
     }
     ticker_stop();
 }

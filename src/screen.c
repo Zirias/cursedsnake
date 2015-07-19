@@ -1,7 +1,10 @@
+#define _POSIX_C_SOURCE 200112L
 #include "screen.h"
 
 #include <curses.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 enum cpair
 {
@@ -10,7 +13,8 @@ enum cpair
     CP_RED,
     CP_YELLOW,
     CP_GREEN,
-    CP_STATUS
+    CP_STATUS,
+    CP_DIALOG
 };
 
 struct screen
@@ -40,6 +44,7 @@ screen_create()
     init_pair(CP_YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(CP_GREEN, COLOR_GREEN, COLOR_BLACK);
     init_pair(CP_STATUS, COLOR_BLACK, COLOR_CYAN);
+    init_pair(CP_DIALOG, COLOR_WHITE, COLOR_BLUE);
     bkgd(COLOR_PAIR(CP_WHITE));
     raw();
     noecho();
@@ -60,8 +65,9 @@ screen_create()
     insertString(tmp, self->w - 16, "score:");
     waddstr(self->status, tmp);
     free(tmp);
-    refresh();
-    wrefresh(self->status);
+    wnoutrefresh(stdscr);
+    wnoutrefresh(self->status);
+    doupdate();
     return self;
 }
 
@@ -85,6 +91,13 @@ int
 screen_height(const Screen *self)
 {
     return self->h;
+}
+
+void
+screen_clear(Screen *self)
+{
+    wclear(self->field);
+    wrefresh(self->field);
 }
 
 void
@@ -141,5 +154,56 @@ screen_putItem(Screen *self, int y, int x, Item item)
 	    break;
     }
     wrefresh(self->field);
+}
+
+void
+screen_showDialog(Screen *self, const char *title, const char *fmt, ...)
+{
+    va_list ap;
+    int w, h, y, x, i;
+    size_t l;
+    char *buf;
+    char *lines[10];
+    WINDOW *dlg;
+
+    l = strlen(fmt)*2;
+    buf = malloc(l);
+    va_start(ap, fmt);
+    vsnprintf(buf, l, fmt, ap);
+    va_end(ap);
+
+    lines[0] = strtok(buf, "\n");
+    for (i = 1; i < 10; ++i)
+    {
+	lines[i] = strtok(0, "\n");
+	if (!lines[i]) break;
+    }
+    h = i;
+
+    w = (int)strlen(title);
+    for (i = 0; i < h; ++i)
+    {
+	l = strlen(lines[i]);
+	if (l > (size_t)w) w = (int)l;
+    }
+
+    h += 4;
+    w += 4;
+    y = (self->h - h) >> 1;
+    x = (self->w - w) >> 1;
+
+    dlg = newwin(h, w, y, x);
+    wbkgd(dlg, COLOR_PAIR(CP_DIALOG));
+    box(dlg, 0, 0);
+
+    mvwaddstr(dlg, 1, 2 + (w-4-(int)strlen(title))/2, title);
+    for (i = 0; i < h-3; ++i)
+    {
+	mvwaddstr(dlg, i+3, 2, lines[i]);
+    }
+
+    free(buf);
+    wrefresh(dlg);
+    delwin(dlg);
 }
 
