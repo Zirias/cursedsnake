@@ -47,6 +47,7 @@ screen_create()
     init_pair(CP_DIALOG, COLOR_WHITE, COLOR_BLUE);
     bkgd(COLOR_PAIR(CP_WHITE));
     raw();
+    nonl();
     noecho();
     keypad(stdscr, 1);
     timeout(0);
@@ -182,7 +183,7 @@ screen_showDialog(Screen *self, const char *title, const char *fmt, ...)
     x = (self->w - w) >> 1;
 
     dlg = subwin(self->field, h, w, y, x);
-    wclear(dlg);
+    werase(dlg);
     wbkgd(dlg, COLOR_PAIR(CP_DIALOG));
     box(dlg, 0, 0);
 

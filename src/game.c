@@ -283,7 +283,8 @@ game_run(void)
 		do
 		{
 		    key = getch();
-		} while (key != 'q' && key != 'Q' && key != '\n');
+		} while (key != 'q' && key != 'Q' && key != KEY_ENTER
+				&& key != '\r' && key != '\n');
 		if (key == 'q' || key == 'Q') break;
 		board_clear(board);
 		screen_clear(screen);
