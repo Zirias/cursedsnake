@@ -10,7 +10,7 @@ USELTO := 1
 -include defaults.mk
 
 CFLAGS += -fvisibility=hidden -std=c89 -Wall -Wextra -pedantic \
-	  -Wformat=2 -Winit-self -Wshadow -Wbad-function-cast \
+	  -Winit-self -Wshadow -Wbad-function-cast \
 	  -Wwrite-strings -Wconversion
 
 BINDIR := bin
@@ -39,7 +39,7 @@ CFLAGS += -flto
 LDFLAGS += -flto
 endif
 else
-CFLAGS += -DDEBUG -g3 -O0
+CFLAGS += -Wformat=2 -DDEBUG -g3 -O0
 VTAGS += [debug]
 endif
 
