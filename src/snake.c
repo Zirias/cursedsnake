@@ -8,7 +8,6 @@ struct snake
     int len;
     int maxlen;
     int grow;
-    int skip;
     Dir dir;
     Pos *head;
     Pos *tail;
@@ -49,7 +48,6 @@ void
 snake_setDir(Snake *self, Dir dir)
 {
     self->dir = dir;
-    if (dir == UP || dir == DOWN) self->skip = 1;
 }
 
 void
@@ -63,14 +61,6 @@ snake_step(Snake *self)
 {
     Pos *newHead;
     Item item;
-
-    if (self->skip)
-    {
-	self->skip = 0;
-	return SST_NORMAL;
-    }
-
-    if (self->dir == UP || self->dir == DOWN) self->skip = 1;
 
     newHead = self->head + 1;
     if (newHead > &(self->coord[self->maxlen])) newHead = &(self->coord[0]);

@@ -17,6 +17,7 @@ typedef enum
     HEAD,
     TAIL,
     FOOD,
+    FFOOD,
     WALL
 } Item;
 

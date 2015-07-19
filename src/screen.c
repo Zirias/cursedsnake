@@ -143,6 +143,9 @@ screen_putItem(Screen *self, int y, int x, Item item, int refresh)
 	case FOOD:
 	    mvwaddch(self->field, y, x, '#'|COLOR_PAIR(CP_GREEN)|A_BOLD);
 	    break;
+	case FFOOD:
+	    mvwaddch(self->field, y, x, '#'|COLOR_PAIR(CP_GREEN));
+	    break;
 	case WALL:
 #ifdef WIN32
 	    mvwaddch(self->field, y, x,

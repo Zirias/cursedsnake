@@ -4,8 +4,12 @@
 #include "board.h"
 #include "snake.h"
 #include "ticker.h"
+#include "food.h"
 
 #include <curses.h>
+
+/* accelerate every 2 minutes */
+#define NEXT_SPEED_TICKS 12000
 
 static Screen *screen = 0;
 static Board *board = 0;
@@ -13,18 +17,61 @@ static Snake *snake = 0;
 static unsigned int score;
 static unsigned int scoreadd;
 static int speed;
+static int hspeed;
+static int vspeed;
 static int nextStep;
 static int nextFood;
+static int nextSpeed;
+static int maxFood;
+static int numFood;
+static Pos bsize;
+
+static void
+foodCreated(Food *f)
+{
+    (void)(f);
+
+    ++numFood;
+}
+
+static void
+foodDestroyed(Food *f)
+{
+    (void)(f);
+
+    --numFood;
+}
+
+static void
+addFood(void)
+{
+    int x, y;
+
+    if (numFood < maxFood)
+    {
+	do
+	{
+	    x = randomNum(0, bsize.x-1);
+	    y = randomNum(0, bsize.y-1);
+	} while (board_get(board, y, x) != EMPTY);
+	board_set(board, y, x, FOOD);
+    }
+}
 
 static void
 newgame(void)
 {
+    int i;
+    
     snake_destroy(snake);
     score = 0;
     scoreadd = 250;
-    speed = 16;
+    speed = 8;
+    hspeed = 10;
+    vspeed = 15;
     nextStep = 1;
-    nextFood = randomNum(100,200);
+    nextSpeed = NEXT_SPEED_TICKS;
+    nextFood = randomNum(50,100);
     snake = snake_create(board, 2, 10);
     if (!snake)
     {
@@ -32,6 +79,8 @@ newgame(void)
 	screen_destroy(screen);
 	exit(1);
     }
+
+    for (i = 0; i < maxFood / 3; ++i) addFood();
     screen_printScore(screen, score);
 }
 
@@ -47,12 +96,19 @@ game_init(void)
 	screen_destroy(screen);
 	return;
     }
+    board_size(board, &bsize);
+    maxFood = bsize.y * bsize.x / 60;
+    numFood = 0;
+    food_onCreate(&foodCreated);
+    food_onDestroy(&foodDestroyed);
     newgame();
 }
 
 void
 game_done(void)
 {
+    food_onCreate(0);
+    food_onDestroy(0);
     snake_destroy(snake);
     board_destroy(board);
     screen_destroy(screen);
@@ -62,12 +118,10 @@ game_done(void)
 void
 game_run(void)
 {
-    int key, x, y;
+    int key;
     Step step;
-    Pos size;
 
-    ticker_start(5000);
-    board_size(board, &size);
+    ticker_start(10000);
     while (1)
     {
 	ticker_wait();
@@ -84,25 +138,29 @@ game_run(void)
 	    if (key == 'q' || key == 'Q') break;
 	    board_redraw(board);
 	    timeout(0);
-	    ticker_start(5000);
+	    ticker_start(10000);
 	    goto cont;
 	}
 	switch (key)
 	{
 	    case KEY_LEFT:
 		snake_setDir(snake, LEFT);
+		speed = hspeed;
 		break;
 
 	    case KEY_DOWN:
 		snake_setDir(snake, DOWN);
+		speed = vspeed;
 		break;
 
 	    case KEY_UP:
 		snake_setDir(snake, UP);
+		speed = vspeed;
 		break;
 
 	    case KEY_RIGHT:
 		snake_setDir(snake, RIGHT);
+		speed = hspeed;
 		break;
 
 	    case ' ':
@@ -115,9 +173,11 @@ game_run(void)
 		} while (key != ' ');
 		screen_pauseOff(screen);
 		timeout(0);
-		ticker_start(5000);
+		ticker_start(10000);
 		break;
 	}
+
+	food_tick();
 
 	if (!--nextStep)
 	{
@@ -154,7 +214,7 @@ game_run(void)
 		screen_clear(screen);
 		newgame();
 		timeout(0);
-		ticker_start(5000);
+		ticker_start(10000);
 		goto cont;
 	    }
 	    if (step == SST_FOOD)
@@ -173,13 +233,28 @@ game_run(void)
 
 	if (!--nextFood)
 	{
-	    nextFood = randomNum(400, 1000);
-	    do
+	    nextFood = randomNum(200, 500);
+	    addFood();
+	}
+
+	if (!--nextSpeed)
+	{
+	    nextSpeed = NEXT_SPEED_TICKS;
+	    if (vspeed > 4)
 	    {
-		x = randomNum(0, size.x-1);
-		y = randomNum(0, size.y-1);
-	    } while (board_get(board, y, x) != EMPTY);
-	    board_set(board, y, x, FOOD);
+		if (speed == vspeed)
+		{
+		    vspeed -= 3;
+		    speed -= 3;
+		    hspeed -= 2;
+		}
+		else
+		{
+		    vspeed -= 3;
+		    speed -= 2;
+		    hspeed -= 2;
+		}
+	    }
 	}
 cont:;
     }
