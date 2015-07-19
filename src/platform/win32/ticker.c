@@ -8,7 +8,6 @@ static HANDLE timer = INVALID_HANDLE_VALUE;
 void
 ticker_init(void)
 {
-    timeBeginPeriod(1);
     timer = CreateWaitableTimer(0, 1, 0);
     if (!timer)
     {
@@ -21,12 +20,12 @@ void
 ticker_done(void)
 {
     CloseHandle(timer);
-    timeEndPeriod(1);
 }
 
 void
 ticker_start(unsigned int usec)
 {
+    timeBeginPeriod(1);
     interval.QuadPart = usec;
     interval.QuadPart *= -10L;
     if (!SetWaitableTimer(timer, &interval, 0, 0, 0, 0))
@@ -40,6 +39,7 @@ void
 ticker_stop(void)
 {
     CancelWaitableTimer(timer);
+    timeEndPeriod(1);
 }
 
 void
