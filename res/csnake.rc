@@ -1,0 +1,25 @@
+1 VERSIONINFO
+FILEVERSION	0,1,0,0
+PRODUCTVERSION	0,1,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "CompanyName", "Palmen IT"
+      VALUE "FileDescription", "Cursed Snake - a tiny snake game in curses"
+      VALUE "FileVersion", "0.1.0"
+      VALUE "InternalName", "cursedsnake"
+      VALUE "LegalCopyright", "Felix Palmen <felix@palmen-it.de>"
+      VALUE "OriginalFilename", "csnake.exe"
+      VALUE "ProductName", "cursedsnake"
+      VALUE "ProductVersion", "0.1.0"
+    END
+  END
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
+IDI_ICON1	ICON	DISCARDABLE	"csnake.ico"
+
