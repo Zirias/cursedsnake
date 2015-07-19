@@ -42,7 +42,11 @@ screen_create()
     init_pair(CP_RED, COLOR_RED, COLOR_BLACK);
     init_pair(CP_YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(CP_GREEN, COLOR_GREEN, COLOR_BLACK);
+#ifdef WIN32
+    init_pair(CP_STATUS, COLOR_BLACK, COLOR_CYAN);
+#else
     init_pair(CP_STATUS, COLOR_CYAN, COLOR_BLACK);
+#endif
     init_pair(CP_DIALOG, COLOR_WHITE, COLOR_BLUE);
     bkgd(COLOR_PAIR(CP_WHITE));
     raw();
@@ -56,7 +60,11 @@ screen_create()
     leaveok(self->status, 1);
     self->field = newwin(0, 0, 1, 0);
     leaveok(self->field, 1);
-    wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_BOLD|A_REVERSE);
+#ifdef WIN32
+    wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_BLINK);
+#else
+    wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_REVERSE|A_BOLD);
+#endif
     mvwaddstr(self->status, 0, 1, "cursed snake   <Q> quit  <SPACE> pause");
     mvwaddstr(self->status, 0, self->w - 16, "score:");
     wnoutrefresh(stdscr);
