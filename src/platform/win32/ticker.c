@@ -8,19 +8,20 @@ static HANDLE timer = INVALID_HANDLE_VALUE;
 void
 ticker_init(void)
 {
+    timeBeginPeriod(1);
     timer = CreateWaitableTimer(0, 1, 0);
     if (!timer)
     {
 	fputs("CreateWaitableTimer failed.\n", stderr);
 	exit(1);
     }
-    timeBeginPeriod(1);
 }
 
 void
 ticker_done(void)
 {
     CloseHandle(timer);
+    timeEndPeriod(1);
 }
 
 void
