@@ -8,7 +8,7 @@ static sigset_t alarm;
 static struct itimerval itv;
 static struct sigaction sasave;
 
-void
+static void
 sighdl(int signum)
 {
     (void)(signum);
