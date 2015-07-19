@@ -234,12 +234,16 @@ game_run(void)
 	    case ' ':
 		ticker_stop();
 		timeout(-1);
-		screen_pauseOn(screen);
+		screen_showDialog(screen, "- P A U S E D -",
+			"Cursed Snake -- (C) 07/2015 Felix Palmen"
+			" <felix@palmen-it.de>.\n"
+			" \n"
+			"                 - press <SPACE> to resume -");
 		do
 		{
 		    key = getch();
 		} while (key != ' ');
-		screen_pauseOff(screen);
+		board_redraw(board);
 		timeout(0);
 		ticker_start(10000);
 		break;
@@ -262,7 +266,7 @@ game_run(void)
 			    "a headache.\n"
 			    "Your final score is %lu.\n"
 			    " \n"
-			    "Press <Q> to quit, any other key to restart.",
+			    "Press <Q> to quit, or <Enter> to restart.",
 			    score);
 		}
 		else
@@ -272,11 +276,14 @@ game_run(void)
 			    "take some rest.\n"
 			    "Your final score is: %lu.\n"
 			    " \n"
-			    "Press <Q> to quit, any other key to play again.",
+			    "Press <Q> to quit, or <Enter> to play again.",
 			    score);
 		}
 		timeout(-1);
-		key = getch();
+		do
+		{
+		    key = getch();
+		} while (key != 'q' && key != 'Q' && key != '\n');
 		if (key == 'q' || key == 'Q') break;
 		board_clear(board);
 		screen_clear(screen);

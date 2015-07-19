@@ -108,20 +108,6 @@ screen_printScore(Screen *self, unsigned int score)
 }
 
 void
-screen_pauseOn(Screen *self)
-{
-    mvwaddstr(self->status, 0, 16, "-- PAUSED --  <SPACE> continue");
-    wrefresh(self->status);
-}
-
-void
-screen_pauseOff(Screen *self)
-{
-    mvwaddstr(self->status, 0, 16, "<Q> quit  <SPACE> pause       ");
-    wrefresh(self->status);
-}
-
-void
 screen_putItem(Screen *self, int y, int x, Item item, int refresh)
 {
     switch (item)
