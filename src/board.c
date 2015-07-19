@@ -88,7 +88,7 @@ board_set(Board *self, int y, int x, Item item)
     if (item == FOOD)
     {
 	self->slots[idx].f = food_create(self, self->screen, y, x);
-	food_draw(self->slots[idx].f);
+	food_draw(self->slots[idx].f, 1);
     }
     else
     {
@@ -107,10 +107,18 @@ board_get(const Board *self, int y, int x)
 
 void board_redraw(const Board *self)
 {
-    int y, x;
+    int idx, y, x;
     for (y = 0; y < self->h; ++y) for (x = 0; x < self->w; ++x)
     {
-	screen_putItem(self->screen, y, x, self->slots[y*self->w+x].it, 0);
+	idx = y*self->w+x;
+	if (self->slots[idx].it == FOOD)
+	{
+	    food_draw(self->slots[idx].f, 0);
+	}
+	else
+	{
+	    screen_putItem(self->screen, y, x, self->slots[idx].it, 0);
+	}
     }
     screen_refresh(self->screen);
 }
