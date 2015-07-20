@@ -23,6 +23,7 @@ typedef enum
 
 typedef enum
 {
+    NONE,
     LEFT,
     DOWN,
     RIGHT,

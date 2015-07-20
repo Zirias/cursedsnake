@@ -8,7 +8,7 @@ struct snake
     int len;
     int maxlen;
     int grow;
-    Dir dir;
+    Dir dir[4];
     Pos *head;
     Pos *tail;
     Pos coord[1];
@@ -29,7 +29,10 @@ snake_create(Board *b, int y, int x)
     self->len = 0;
     self->maxlen = maxlen;
     self->grow = 8;
-    self->dir = RIGHT;
+    self->dir[0] = RIGHT;
+    self->dir[1] = NONE;
+    self->dir[2] = NONE;
+    self->dir[3] = NONE;
     self->head = &(self->coord[0]);
     self->tail = &(self->coord[0]);
     self->coord[0].y = y;
@@ -47,7 +50,15 @@ snake_destroy(Snake *self)
 void
 snake_setDir(Snake *self, Dir dir)
 {
-    self->dir = dir;
+    int i;
+    for (i = 1; i < 4; ++i)
+    {
+	if (self->dir[i] == NONE)
+	{
+	    self->dir[i] = dir;
+	    break;
+	}
+    }
 }
 
 void
@@ -62,17 +73,29 @@ snake_len(const Snake *self)
     return self->len;
 }
 
+static void dequeueDir(Snake *self)
+{
+    int i;
+
+    if (self->dir[1] != NONE)
+    {
+	for (i=0; i<3; ++i) self->dir[i] = self->dir[i+1];
+	self->dir[3] = NONE;
+    }
+}
+
 Step
 snake_step(Snake *self)
 {
     Pos *newHead;
     Item item;
 
+    dequeueDir(self);
     newHead = self->head + 1;
     if (newHead > &(self->coord[self->maxlen])) newHead = &(self->coord[0]);
     newHead->x = self->head->x;
     newHead->y = self->head->y;
-    switch (self->dir)
+    switch (self->dir[0])
     {
 	case LEFT:
 	    --newHead->x;
@@ -85,6 +108,8 @@ snake_step(Snake *self)
 	    break;
 	case UP:
 	    --newHead->y;
+	    break;
+	default:
 	    break;
     }
     item = board_get(self->b, newHead->y, newHead->x);
