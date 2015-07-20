@@ -51,13 +51,17 @@ void
 snake_setDir(Snake *self, Dir dir)
 {
     int i;
+    Dir p;
+
+    p = self->dir[0];
     for (i = 1; i < 4; ++i)
     {
 	if (self->dir[i] == NONE)
 	{
-	    self->dir[i] = dir;
+	    if (dir != p) self->dir[i] = dir;
 	    break;
 	}
+	p = self->dir[i];
     }
 }
 
