@@ -7,6 +7,7 @@
 #include "food.h"
 
 #include <curses.h>
+#include <math.h>
 
 /* accelerate every 2 minutes */
 #define NEXT_SPEED_TICKS 12000
@@ -66,7 +67,7 @@ randomWalls(void)
 {
     int i;
 
-    int num = bsize.y * bsize.x / 230;
+    int num = (int)(sqrt(bsize.y * bsize.x) / 5);
     int mvlen = bsize.y / 4;
     int dvlen = bsize.y / 6;
     int mhlen = bsize.x / 4;
