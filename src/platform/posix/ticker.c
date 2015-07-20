@@ -34,12 +34,12 @@ ticker_done(void)
 }
 
 void
-ticker_start(unsigned int usec)
+ticker_start(int msec)
 {
-    itv.it_interval.tv_sec = usec / 1000000;
-    itv.it_interval.tv_usec = usec % 1000000;
-    itv.it_value.tv_sec = usec / 1000000;
-    itv.it_value.tv_usec = usec % 1000000;
+    itv.it_interval.tv_sec = msec / 1000;
+    itv.it_interval.tv_usec = (1000*msec) % 1000000;
+    itv.it_value.tv_sec = msec / 1000;
+    itv.it_value.tv_usec = (1000*msec) % 1000000;
     if (setitimer(ITIMER_REAL, &itv, 0) < 0)
     {
 	perror("setitimer");

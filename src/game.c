@@ -196,7 +196,7 @@ game_run(void)
     int key, nfm;
     Step step;
 
-    ticker_start(10000);
+    ticker_start(10);
     while (1)
     {
 	ticker_wait();
@@ -213,7 +213,7 @@ game_run(void)
 	    if (key == 'q' || key == 'Q') break;
 	    board_redraw(board);
 	    timeout(0);
-	    ticker_start(10000);
+	    ticker_start(10);
 	    goto cont;
 	}
 	switch (key)
@@ -252,7 +252,7 @@ game_run(void)
 		} while (key != ' ');
 		board_redraw(board);
 		timeout(0);
-		ticker_start(10000);
+		ticker_start(10);
 		break;
 	}
 
@@ -297,7 +297,7 @@ game_run(void)
 		screen_clear(screen);
 		newgame();
 		timeout(0);
-		ticker_start(10000);
+		ticker_start(10);
 		goto cont;
 	    }
 	    if (step == SST_FOOD)

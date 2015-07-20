@@ -2,13 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static LARGE_INTEGER interval;
 static HANDLE timer = INVALID_HANDLE_VALUE;
 
 void
 ticker_init(void)
 {
-    timer = CreateWaitableTimer(0, 1, 0);
+    timer = CreateWaitableTimer(0, 0, 0);
     if (!timer)
     {
 	fputs("CreateWaitableTimer failed.\n", stderr);
@@ -23,12 +22,13 @@ ticker_done(void)
 }
 
 void
-ticker_start(unsigned int usec)
+ticker_start(int msec)
 {
+    LARGE_INTEGER due;
+
     timeBeginPeriod(1);
-    interval.QuadPart = usec;
-    interval.QuadPart *= -10L;
-    if (!SetWaitableTimer(timer, &interval, 0, 0, 0, 0))
+    due.QuadPart = -10000L * msec;
+    if (!SetWaitableTimer(timer, &due, msec, 0, 0, 0))
     {
 	fputs("SetWaitableTimer failed.\n", stderr);
 	exit(1);
@@ -46,9 +46,4 @@ void
 ticker_wait(void)
 {
     WaitForSingleObject(timer, INFINITE);
-    if (!SetWaitableTimer(timer, &interval, 0, 0, 0, 0))
-    {
-	fputs("SetWaitableTimer failed.\n", stderr);
-	exit(1);
-    }
 }
