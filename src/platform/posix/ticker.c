@@ -8,6 +8,8 @@ static sigset_t alarm;
 static struct itimerval itv;
 static struct sigaction sasave;
 
+/* unused signal handler, SIG_DFL would terminate, SIG_IGN causes
+ * sigwait() to wait forever -- therefore this dummy */
 static void
 sighdl(int signum)
 {
