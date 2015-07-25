@@ -24,8 +24,13 @@ above looks ok, so how do you like this version of *good old* xterm?
 Thanks to *PDcurses* (and a tiny bit of platform specific tweaking), it even
 works fine on windows:
 
-![csnake screenshot 2015-07-19](/../screenshots/csnake_0.1_cmd.png?raw=true
+![csnake on windows](/../screenshots/csnake_0.1_cmd.png?raw=true
 "csnake running on my windows dev box")
+
+... as well as on DOS (this looks crazy on a 1920x1200 display):
+
+![csnake on dos](/../screenshots/csnake_0.1_dos.png?raw=true
+"csnake running in dosbox")
 
 ... here we can have this old *MS DOS smiley* as the snake head -- great! :)
 
