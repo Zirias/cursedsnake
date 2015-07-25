@@ -9,9 +9,12 @@ USELTO := 1
 # read local configuration
 -include defaults.mk
 
-CFLAGS += -fvisibility=hidden -std=c89 -Wall -Wextra -pedantic \
-	  -Winit-self -Wshadow -Wbad-function-cast \
-	  -Wwrite-strings -Wconversion
+CFLAGS += -std=c89 -Wall -Wextra -pedantic -Winit-self -Wshadow \
+	  -Wbad-function-cast -Wwrite-strings -Wconversion
+
+ifneq ($(PLATFORM),dos)
+CFLAGS += -fvisibility=hidden
+endif
 
 BINDIR := bin
 
