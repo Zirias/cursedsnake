@@ -69,7 +69,7 @@ directory of your toolchain (e.g. `/usr/local/i586-pc-msdosdjgpp/lib`), named
 your toolchain (e.g. `/usr/local/i586-pc-msdosdjgpp/include`). Then, the
 following commands will do:
 
-    CFLAGS=-DDOS make CC=i586-pc-msdosdjgpp-gcc DEBUG=0 PLATFORM=dos LDFLAGS=-fuse-ld=bfd
+    CFLAGS=-DDOS make CC=i586-pc-msdosdjgpp-gcc PLATFORM=dos
     i586-pc-msdosdjgpp-strip --strip-all bin/csnake.exe
 
 ## Prerelease binaries
