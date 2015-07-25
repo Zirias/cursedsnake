@@ -54,9 +54,13 @@ some more options to `make`:
 
 Try `LDFLAGS=-fuse-ld=gold make CC=clang`.
 
-## Prerelease win32 binary
+## Prerelease binaries
 
-So you don't have a GNU toolchain on your windows box but would like to try
-this out just for fun? well, here's the
-[latest test build](/../files/current/csnake.exe?raw=true) (i686 win32).
+So you don't have a GNU toolchain on your machine but would like to try this
+out just for fun? Here are some builds (redone from time to time):
+
+ - [Windows 32bit](/../files/current/win32/csnake.exe?raw=true) (.exe)
+ - [Linux 32bit](/../files/current/linux32/csnake?raw=true) (ELF binary)
+ - [Linux 64bit](/../files/current/linux64/csnake?raw=true) (ELF binary)
+ - [MS-DOS](/../files/current/dos/csnake.zip?raw=true) (.zip)
 
