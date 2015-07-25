@@ -6,6 +6,10 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+#if (defined(WIN32) || defined(DOS))
+#define USEMSCP
+#endif
+
 enum cpair
 {
     CP_NONE,
@@ -42,7 +46,7 @@ screen_create()
     init_pair(CP_RED, COLOR_RED, COLOR_BLACK);
     init_pair(CP_YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(CP_GREEN, COLOR_GREEN, COLOR_BLACK);
-#ifdef WIN32
+#ifdef USEMSCP
     init_pair(CP_STATUS, COLOR_BLACK, COLOR_CYAN);
 #else
     init_pair(CP_STATUS, COLOR_CYAN, COLOR_BLACK);
@@ -60,7 +64,7 @@ screen_create()
     leaveok(self->status, 1);
     self->field = newwin(0, 0, 1, 0);
     leaveok(self->field, 1);
-#ifdef WIN32
+#ifdef USEMSCP
     wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_BLINK);
 #else
     wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_REVERSE|A_BOLD);
@@ -125,7 +129,7 @@ screen_putItem(Screen *self, int y, int x, Item item, int refresh)
 	    mvwaddch(self->field, y, x, ' '|COLOR_PAIR(CP_WHITE));
 	    break;
 	case HEAD:
-#ifdef WIN32
+#ifdef USEMSCP
 	    mvwaddch(self->field, y, x,
 		    1|COLOR_PAIR(CP_YELLOW)|A_BOLD|A_ALTCHARSET);
 #else
