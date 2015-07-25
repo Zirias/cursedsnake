@@ -59,6 +59,19 @@ some more options to `make`:
 
 Try `LDFLAGS=-fuse-ld=gold make CC=clang`.
 
+### Cross-compiling for DOS
+
+You need a [`DJGPP`
+toolchain](https://github.com/andrewwutw/build-djgpp/releases). Install it,
+then compile the `PDcurses` lib with it. `pdcurses.a` goes in the `lib`
+directory of your toolchain (e.g. `/usr/local/i586-pc-msdosdjgpp/lib`), named
+`libpdcurses.a`. Place the header `curses.h` in the `include` directory of
+your toolchain (e.g. `/usr/local/i586-pc-msdosdjgpp/include`). Then, the
+following commands will do:
+
+    CFLAGS=-DDOS make CC=i586-pc-msdosdjgpp-gcc DEBUG=0 PLATFORM=dos LDFLAGS=-fuse-ld=bfd
+    i586-pc-msdosdjgpp-strip --strip-all bin/csnake.exe
+
 ## Prerelease binaries
 
 So you don't have a GNU toolchain on your machine but would like to try this
