@@ -12,7 +12,9 @@ USELTO := 1
 CFLAGS += -std=c89 -Wall -Wextra -pedantic -Winit-self -Wshadow \
 	  -Wbad-function-cast -Wwrite-strings -Wconversion
 
-ifneq ($(PLATFORM),dos)
+ifeq ($(PLATFORM),dos)
+EXE := .exe
+else
 CFLAGS += -fvisibility=hidden
 endif
 
