@@ -46,8 +46,8 @@ void
 ticker_init(void)
 {
     /* determine protection ring */
-    __asm__ volatile ("mov %%cs, %0\n\t"
-		      "and $3, %0" : "=r" (ring));
+    __asm__ ("mov %%cs, %0\n\t"
+	     "and $3, %0" : "=r" (ring));
 
     errno = 0;
     __dpmi_yield();
