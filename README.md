@@ -105,5 +105,5 @@ out just for fun? Here are some builds (redone from time to time):
  - [Windows 32bit](/../files/current/win32/csnake.exe?raw=true) (.exe)
  - [Linux 32bit](/../files/current/linux32/csnake?raw=true) (ELF binary)
  - [Linux 64bit](/../files/current/linux64/csnake?raw=true) (ELF binary)
- - [MS-DOS](/../files/current/dos/csnake.exe?raw=true) (.exe)
+ - [MS-DOS / Win 9x](/../files/current/dos/csnake.exe?raw=true) (.exe)
 
