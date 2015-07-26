@@ -83,15 +83,15 @@ possibilities to have cursed snake run in `ring 0`, so it can use `HLT`:
 
 1. Modify the stub linked by DJGPP to load CWSDPR0.EXE instead:
 
-    /[...]/i586-pc-msdosdjgpp/bin/stubedit bin/csnake.exe dpmi=CWSDPR0.EXE
+	/[...]/i586-pc-msdosdjgpp/bin/stubedit bin/csnake.exe dpmi=CWSDPR0.EXE
 
    With this, the CWSDPR0.EXE must be in the same directory as csnake.exe to
    run it.
 
 2. Replace the stub with CWSDSTR0.EXE:
 
-    /[...]/i586-pc-msdosdjgpp/bin/exe2coff bin/csnake.exe
-    cat /path/to/CWSDSTR0.EXE bin/csnake >bin/csnake.exe
+	/[...]/i586-pc-msdosdjgpp/bin/exe2coff bin/csnake.exe
+	cat /path/to/CWSDSTR0.EXE bin/csnake >bin/csnake.exe
 
    The resulting binary will run on its own even in plain DOS, because it has
    the CWS DPMI server embedded.
