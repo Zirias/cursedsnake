@@ -54,7 +54,7 @@ ticker_init(void)
 
     if (errno)
     {
-	if (haveDosidle())
+	if (!haveDosidle())
 	{
 	    if (ring)
 	    {
