@@ -69,8 +69,32 @@ directory of your toolchain (e.g. `/usr/local/i586-pc-msdosdjgpp/lib`), named
 your toolchain (e.g. `/usr/local/i586-pc-msdosdjgpp/include`). Then, the
 following commands will do:
 
-    CFLAGS=-DDOS make CC=i586-pc-msdosdjgpp-gcc PLATFORM=dos
+    make CC=i586-pc-msdosdjgpp-gcc PLATFORM=dos
     i586-pc-msdosdjgpp-strip --strip-all bin/csnake.exe
+
+To make it run correctly under plain DOS, you need a DPMI server (Windows 9x
+already provides one). DJGPP links the .exe with a stub that tries to run
+CWSDPMI.EXE if no DPMI services are detected. This will not work because
+cursed snake uses the privileged `HLT` instruction to save power when running
+under plain DOS and CWSDPMI puts the code in `ring 3`. First, you have to
+download the CWSDPMI binary distribution
+[from here](http://homer.rice.edu/~sandmann/cwsdpmi/). Then there are two
+possibilities to have cursed snake run in `ring 0`, so it can use `HLT`:
+
+1. Modify the stub linked by DJGPP to load CWSDPR0.EXE instead:
+
+    /[...]/i586-pc-msdosdjgpp/bin/stubedit bin/csnake.exe dpmi=CWSDPR0.EXE
+
+   With this, the CWSDPR0.EXE must be in the same directory as csnake.exe to
+   run it.
+
+2. Replace the stub with CWSDSTR0.EXE:
+
+    /[...]/i586-pc-msdosdjgpp/bin/exe2coff bin/csnake.exe
+    cat /path/to/CWSDSTR0.EXE bin/csnake >bin/csnake.exe
+
+   The resulting binary will run on its own even in plain DOS, because it has
+   the CWS DPMI server embedded.
 
 ## Prerelease binaries
 
@@ -80,5 +104,5 @@ out just for fun? Here are some builds (redone from time to time):
  - [Windows 32bit](/../files/current/win32/csnake.exe?raw=true) (.exe)
  - [Linux 32bit](/../files/current/linux32/csnake?raw=true) (ELF binary)
  - [Linux 64bit](/../files/current/linux64/csnake?raw=true) (ELF binary)
- - [MS-DOS](/../files/current/dos/csnake.zip?raw=true) (.zip)
+ - [MS-DOS](/../files/current/dos/csnake.exe?raw=true) (.zip)
 

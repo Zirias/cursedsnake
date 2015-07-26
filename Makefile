@@ -14,6 +14,7 @@ CFLAGS += -std=c89 -Wall -Wextra -pedantic -Winit-self -Wshadow \
 
 ifeq ($(PLATFORM),dos)
 EXE := .exe
+CFLAGS += -DDOS
 else
 CFLAGS += -fvisibility=hidden
 endif
