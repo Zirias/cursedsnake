@@ -9,6 +9,14 @@
 #include <curses.h>
 #include <math.h>
 
+#ifdef DOS
+#undef getch
+int dos_getch(void);
+void dos_timeout(int delay);
+#define getch dos_getch
+#define timeout dos_timeout
+#endif
+
 /* accelerate every 2 minutes */
 #define NEXT_SPEED_TICKS 12000
 
