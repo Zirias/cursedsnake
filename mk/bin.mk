@@ -21,12 +21,12 @@ endif
 $$(BINDIR)$$(PSEP)$(T)$$(EXE): $$($(T)_SOURCES_FULL:.c=.o) \
     $$($(T)_LIBS) | bindir
 	$$(VLD)
-	$$(VR)$$(CC) -o$$@ $$^ $$($(T)_LIBS) $$(LDFLAGS) $$($(T)_LDFLAGS) \
-	       $$($(T)_$$(PLATFORM)_LDFLAGS)
+	$$(VR)$$(CROSS_COMPILE)$$(CC) -o$$@ $$^ $$($(T)_LIBS) $$(LDFLAGS) \
+		$$($(T)_LDFLAGS) $$($(T)_$$(PLATFORM)_LDFLAGS)
 
 $(P)$$(PSEP)%.d: $(P)$$(PSEP)%.c Makefile conf.mk
 	$$(VDEP)
-	$$(VR)$$(CCDEP) -MT"$$@ $$(@:.d=.o)" -MF$$@ \
+	$$(VR)$$(CROSS_COMPILE)$$(CCDEP) -MT"$$@ $$(@:.d=.o)" -MF$$@ \
 	    $$(CFLAGS) $$(INCLUDES) $$<
 
 ifneq ($$(MAKECMDGOALS),clean)
@@ -37,6 +37,6 @@ endif
 
 $(P)$$(PSEP)%.o: $(P)$$(PSEP)%.c Makefile conf.mk $(P)$$(PSEP)$(T).mk
 	$$(VCC)
-	$$(VR)$$(CC) -o$$@ -c $$(CFLAGS) $$($(T)_DEFINES) \
+	$$(VR)$$(CROSS_COMPILE)$$(CC) -o$$@ -c $$(CFLAGS) $$($(T)_DEFINES) \
 	    $$(INCLUDES) $$($(T)_INCLUDES) $$<
 endef

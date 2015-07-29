@@ -67,10 +67,9 @@ then compile the `PDcurses` lib with it. `pdcurses.a` goes in the `lib`
 directory of your toolchain (e.g. `/usr/local/i586-pc-msdosdjgpp/lib`), named
 `libpdcurses.a`. Place the header `curses.h` in the `include` directory of
 your toolchain (e.g. `/usr/local/i586-pc-msdosdjgpp/include`). Then, the
-following commands will do:
+following command will do:
 
-    make CC=i586-pc-msdosdjgpp-gcc PLATFORM=dos
-    i586-pc-msdosdjgpp-strip --strip-all bin/csnake.exe
+    make CROSS_COMPILE=i586-pc-msdosdjgpp- PLATFORM=dos strip
 
 To make it run correctly under plain DOS, you need a DPMI server (Windows 9x
 already provides one). DJGPP links the .exe with a stub that tries to run
