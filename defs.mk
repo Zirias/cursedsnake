@@ -16,12 +16,6 @@ CATOUT :=
 EQT :=
 CMDQUIET := >nul 2>nul & verify >nul
 
-CFLAGS += -DWIN32
-platform_LDFLAGS :=
-platform_LIBS :=
-lib_CFLAGS :=
-lib_LIBS :=
-
 PLATFORM := win32
 
 else
@@ -44,11 +38,6 @@ CATOUT := >
 EQT := "
 #" make vim syntax highlight happy
 CMDQUIET := >/dev/null 2>&1
-
-platform_LDFLAGS :=
-platform_LIBS :=
-lib_CFLAGS := -fPIC
-lib_LIBS :=
 
 PLATFORM := posix
 

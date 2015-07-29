@@ -18,6 +18,9 @@ CFLAGS += -DDOS
 else
 CFLAGS += -fvisibility=hidden
 endif
+ifeq ($(PLATFORM),win32)
+CFLAGS += -DWIN32
+endif
 
 BINDIR := bin
 

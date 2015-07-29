@@ -14,7 +14,7 @@ $(T)_LIBS += $$($(T)_win32_RES:.rc=.o)
 
 $$($(T)_win32_RES:.rc=.o): $$($(T)_win32_RES)
 	$$(VRES)
-	$$(VR)windres $$^ $$@
+	$$(VR)$$(CROSS_COMPILE)windres $$^ $$@
 
 endif
 
