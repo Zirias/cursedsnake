@@ -10,7 +10,8 @@ endif
 SOURCES += $$($(T)_SOURCES_FULL)
 
 ifeq ($$(PLATFORM),win32)
-$(T)_LIBS += $$($(T)_win32_RES:.rc=.o)
+CLEAN += $$($(T)_win32_RES:.rc=.o)
+$(T)_EXTRADEPS += $$($(T)_win32_RES:.rc=.o)
 
 $$($(T)_win32_RES:.rc=.o): $$($(T)_win32_RES)
 	$$(VRES)
@@ -18,8 +19,8 @@ $$($(T)_win32_RES:.rc=.o): $$($(T)_win32_RES)
 
 endif
 
-$$(BINDIR)$$(PSEP)$(T)$$(EXE): $$($(T)_SOURCES_FULL:.c=.o) \
-    $$($(T)_LIBS) | bindir
+$$(BINDIR)$$(PSEP)$(T)$$(EXE): $$($(T)_SOURCES_FULL:.c=.o) $$($(T)_EXTRADEPS) \
+	$$($(T)_LIBS) | bindir
 	$$(VLD)
 	$$(VR)$$(CROSS_COMPILE)$$(CC) -o$$@ $$^ $$($(T)_LIBS) $$(LDFLAGS) \
 		$$($(T)_LDFLAGS) $$($(T)_$$(PLATFORM)_LDFLAGS)

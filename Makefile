@@ -19,6 +19,7 @@ else
 CFLAGS += -fvisibility=hidden
 endif
 ifeq ($(PLATFORM),win32)
+EXE := .exe
 CFLAGS += -DWIN32
 endif
 
