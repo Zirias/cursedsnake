@@ -1,0 +1,3 @@
+[submodule "externals/clang-libdos"]
+	path = externals/clang-libdos
+	url = https://github.com/Zirias/clang-libdos
