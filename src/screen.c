@@ -14,7 +14,7 @@ enum cpair
 {
     CP_NONE,
     CP_WHITE,
-    CP_RED,
+    CP_RVRED,
     CP_YELLOW,
     CP_GREEN,
     CP_STATUS,
@@ -43,7 +43,7 @@ screen_create()
     getmaxyx(self->main, self->h, self->w);
     start_color();
     init_pair(CP_WHITE, COLOR_WHITE, COLOR_BLACK);
-    init_pair(CP_RED, COLOR_RED, COLOR_BLACK);
+    init_pair(CP_RVRED, COLOR_BLACK, COLOR_RED);
     init_pair(CP_YELLOW, COLOR_YELLOW, COLOR_BLACK);
     init_pair(CP_GREEN, COLOR_GREEN, COLOR_BLACK);
 #ifdef USEMSCP
@@ -146,8 +146,7 @@ screen_putItem(Screen *self, int y, int x, Item item, int refresh)
 	    mvwaddch(self->field, y, x, '#'|COLOR_PAIR(CP_GREEN));
 	    break;
 	case WALL:
-	    mvwaddch(self->field, y, x,
-		    ' '|COLOR_PAIR(CP_RED)|A_REVERSE);
+	    mvwaddch(self->field, y, x, ' '|COLOR_PAIR(CP_RVRED));
 	    break;
     }
     if (refresh) wrefresh(self->field);
