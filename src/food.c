@@ -59,7 +59,7 @@ food_destroy(Food *self)
 static void
 tick(Food *self)
 {
-    if (--self->time == 300) food_draw(self, 1);
+    if (--self->time == 300) food_draw(self);
     if (!self->time) board_set(self->b, self->y, self->x, EMPTY);
 }
 
@@ -74,10 +74,10 @@ food_tick(void)
 }
 
 void
-food_draw(Food *self, int refresh)
+food_draw(Food *self)
 {
     screen_putItem(self->s, self->y, self->x,
-	    self->time > 300 ? FOOD : FFOOD, refresh);
+	    self->time > 300 ? FOOD : FFOOD);
 }
 
 void

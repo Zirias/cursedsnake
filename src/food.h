@@ -14,7 +14,7 @@ typedef void (*food_callback)(Food *f);
 Food *food_create(struct board *b, struct screen *s, int y, int x);
 void food_destroy(Food *self);
 
-void food_draw(Food *self, int refresh);
+void food_draw(Food *self);
 
 void food_tick(void);
 void food_onCreate(food_callback cb);

@@ -35,7 +35,12 @@ board_create(Screen *screen)
     }
     --h;
 
+#ifdef DOSREAL
+    size = sizeof(Board);
+    for (int i = 0; i < w*h-1; ++i) size += sizeof(Slot);
+#else
     size = sizeof(Board) + (size_t)(w*h-1) * sizeof(Slot);
+#endif
     self = malloc(size);
     memset(self, 0, size);
     self->w = w;
@@ -91,13 +96,13 @@ board_set(Board *self, int y, int x, Item item)
     if (item == FOOD)
     {
 	self->slots[idx].f = food_create(self, self->screen, y, x);
-	food_draw(self->slots[idx].f, 1);
+	food_draw(self->slots[idx].f);
     }
     else
     {
 	food_destroy(self->slots[idx].f);
 	self->slots[idx].f = 0;
-	screen_putItem(self->screen, y, x, item, 1);
+	screen_putItem(self->screen, y, x, item);
     }
 }
 
@@ -116,13 +121,12 @@ void board_redraw(const Board *self)
 	idx = y*self->w+x;
 	if (self->slots[idx].it == FOOD)
 	{
-	    food_draw(self->slots[idx].f, 0);
+	    food_draw(self->slots[idx].f);
 	}
 	else
 	{
-	    screen_putItem(self->screen, y, x, self->slots[idx].it, 0);
+	    screen_putItem(self->screen, y, x, self->slots[idx].it);
 	}
     }
-    screen_refresh(self->screen);
 }
 

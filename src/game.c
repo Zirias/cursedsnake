@@ -208,6 +208,7 @@ game_run(void)
     ticker_start(10);
     while (1)
     {
+	screen_refresh(screen);
 	ticker_wait();
 	key = getch();
 	if (key == 'q' || key == 'Q')

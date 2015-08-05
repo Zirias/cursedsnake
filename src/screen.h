@@ -14,7 +14,7 @@ int screen_height(const Screen *self);
 void screen_clear(Screen *self);
 void screen_printScore(Screen *self, unsigned int score);
 void screen_printTime(Screen *self, int minutes, int seconds);
-void screen_putItem(Screen *self, int y, int x, Item item, int refresh);
+void screen_putItem(Screen *self, int y, int x, Item item);
 void screen_showDialog(Screen *self, const char *title, const char *fmt, ...);
 void screen_refresh(Screen *self);
 

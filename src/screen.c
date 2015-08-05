@@ -23,7 +23,6 @@ enum cpair
 
 struct screen
 {
-    WINDOW *main;
     WINDOW *field;
     WINDOW *status;
     int w, h;
@@ -34,13 +33,12 @@ screen_create()
 {
     Screen *self = malloc(sizeof(Screen));
 
-    self->main = initscr();
-    if (!self->main)
+    if (!initscr())
     {
 	free(self);
 	return 0;
     }
-    getmaxyx(self->main, self->h, self->w);
+    getmaxyx(stdscr, self->h, self->w);
     start_color();
     init_pair(CP_WHITE, COLOR_WHITE, COLOR_BLACK);
     init_pair(CP_RVRED, COLOR_BLACK, COLOR_RED);
@@ -121,7 +119,7 @@ screen_printTime(Screen *self, int minutes, int seconds)
 }
 
 void
-screen_putItem(Screen *self, int y, int x, Item item, int refresh)
+screen_putItem(Screen *self, int y, int x, Item item)
 {
     switch (item)
     {
@@ -149,7 +147,6 @@ screen_putItem(Screen *self, int y, int x, Item item, int refresh)
 	    mvwaddch(self->field, y, x, ' '|COLOR_PAIR(CP_RVRED));
 	    break;
     }
-    if (refresh) wrefresh(self->field);
 }
 
 void
