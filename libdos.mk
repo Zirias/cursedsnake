@@ -9,9 +9,8 @@ SOURCES:= src/board.c src/csnake.c src/food.c src/game.c src/screen.c \
 LIBDOS:= $(LDP)/core.c $(LDP)/stdlib.c $(LDP)/string.c $(LDP)/stdio.c \
 	$(LDP)/time.c $(LDP)/conio.c $(LDP)/curses.c $(LDP)/rtctimer.c
 
-CFLAGS:= -std=c99 -Oz -nostdlib -m16 -march=i386 -ffreestanding -I$(LDP) \
-	-Wall -Wextra -pedantic -DUSEMSCP -DNOARGV -DDOSREAL \
-	-fomit-frame-pointer
+CFLAGS:= -std=c99 -Os -nostdlib -m16 -march=i386 -ffreestanding -I$(LDP) \
+	-Wall -Wextra -pedantic -DUSEMSCP -DNOARGV -DDOSREAL
 
 LDFLAGS:= -Wl,--nmagic,--script=$(LDBP)/com.ld
 
