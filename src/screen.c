@@ -192,7 +192,7 @@ screen_showDialog(Screen *self, const char *title, const char *fmt, ...)
     box(dlg, 0, 0);
 
     mvwaddstr(dlg, 1, 2 + (w-4-(int)strlen(title))/2, title);
-    for (i = 0; i < h-3; ++i)
+    for (i = 0; i < h-4; ++i)
     {
 	mvwaddstr(dlg, i+3, 2, lines[i]);
     }
