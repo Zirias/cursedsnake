@@ -3,5 +3,6 @@
 *.swp
 conf.mk
 defaults.mk
-bin/*
+bin/
+doscom/
 
