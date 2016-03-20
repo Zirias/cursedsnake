@@ -50,7 +50,6 @@ screen_create()
     init_pair(CP_STATUS, COLOR_CYAN, COLOR_BLACK);
 #endif
     init_pair(CP_DIALOG, COLOR_WHITE, COLOR_BLUE);
-    bkgd(COLOR_PAIR(CP_WHITE));
     raw();
     nonl();
     noecho();
@@ -67,6 +66,7 @@ screen_create()
 #else
     wbkgd(self->status, COLOR_PAIR(CP_STATUS)|A_REVERSE|A_BOLD);
 #endif
+    wbkgd(self->field, COLOR_PAIR(CP_WHITE));
     mvwaddstr(self->status, 0, 1, "cursed snake   <Q> quit  <SPACE> pause");
     mvwaddstr(self->status, 0, self->w - 25, "score:");
     wnoutrefresh(stdscr);
