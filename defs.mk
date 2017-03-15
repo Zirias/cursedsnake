@@ -1,27 +1,20 @@
 ifeq ($(OS),Windows_NT)
-
-EXE := .exe
-CMDSEP := &
-PSEP := \\
-CPF := copy /y
-RMF := del /f /q
-RMFR := -rd /s /q
-MDP := -md
-XIF := if exist
-XTHEN := (
-XFI := )
-CATIN := copy /b
-CATADD := +
-CATOUT :=
-EQT :=
-CMDQUIET := >nul 2>nul & verify >nul
-
 PLATFORM := win32
-
+POSIXSHELL :=
+ifdef LANG
+POSIXSHELL := 1
+endif
+ifdef BASH
+POSIXSHELL := 1
+endif
 else
+PLATFORM := posix
+POSIXSHELL := 1
+endif
 
-SYSNAME := $(shell uname)
+ifdef POSIXSHELL
 
+SYSNAME := $(shell uname 2>/dev/null)
 EXE :=
 CMDSEP := ;
 PSEP := /
@@ -39,7 +32,24 @@ EQT := "
 #" make vim syntax highlight happy
 CMDQUIET := >/dev/null 2>&1
 
-PLATFORM := posix
+else
+
+SYSNAME :=
+EXE := .exe
+CMDSEP := &
+PSEP := \\
+CPF := copy /y
+RMF := del /f /q
+RMFR := -rd /s /q
+MDP := -md
+XIF := if exist
+XTHEN := (
+XFI := )
+CATIN := copy /b
+CATADD := +
+CATOUT :=
+EQT :=
+CMDQUIET := >nul 2>nul & verify >nul
 
 endif
 
