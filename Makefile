@@ -1,10 +1,10 @@
 include defs.mk
 
 # default configuration
-CC := gcc
-DEBUG := 0
-GCC32 := 0
-USELTO := 1
+CC ?= cc
+DEBUG ?= 0
+GCC32 ?= 0
+USELTO ?= 1
 
 # read local configuration
 -include defaults.mk
